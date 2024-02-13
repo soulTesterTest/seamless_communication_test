@@ -381,9 +381,12 @@ class UnitYFinetune:
         batch_itr = self.train_data_loader.get_dataloader()
         while self.epoch_idx < self.params.max_epochs and self.patience_left:
             for train_batch in batch_itr:
+                logger.info("trainBatch",train_batch)
                 self._train_step(batch=train_batch)
+                logger.info("update_idx",self.update_idx,self.params.eval_steps)
                 if self.update_idx and self.update_idx % self.params.eval_steps == 0:
                     self._eval_model()
+                    logger.info("_eval_model",self.is_best_state)
                     if self.is_best_state:
                         self._save_model()
                     elif not self.patience_left:
